@@ -22,7 +22,7 @@ class Controller:
         self._update_taxis()
         self._total_time += self._tick
         self._print_status()
-        time.sleep(2)
+        # time.sleep(2)
             
         
     
@@ -31,7 +31,7 @@ class Controller:
         y_values = random.sample(range(Constants.GRID_LENGTH), Constants.AMOUNT_OF_TAXIS)
         
         for i in range(Constants.AMOUNT_OF_TAXIS):
-            self._taxis.append(Taxi(x_values[i], y_values[i], i))
+            self._taxis.append(Taxi(x_values[i], y_values[i], i+1))
         
             
     
@@ -40,36 +40,43 @@ class Controller:
         end = random.sample(range(Constants.GRID_LENGTH), 2)
         
         self._que_manager.add_request(RideRequest((start[0], start[1]), (end[0], end[1])))
+        print("added request")
        
     
     def _allocate_taxis(self):
         while not self._que_manager.is_empty():
             request = self._que_manager.get_next_request()
+            print(request.get_pos())
             
-            taxi = self._get_closest_taxi(request, request[0])
+            taxi = self._get_closest_taxi(request.get_pos())
             
             if taxi:
                 taxi.assign_ride(request)
             else:
                 self._que_manager.add_request(request)
+        print("allocated taxi")
+
     
     
-    def _get_closest_taxi(self, start):
+    def _get_closest_taxi(self, start: tuple):
         distance = Constants.GRID_LENGTH * 2
         closest_taxi = None
         for taxi in self._taxis:
             if taxi.get_state() == TaxiState.STANDING:
-                if taxi.calculate_distance(start) <= distance:
+                taxi_distance = taxi.calculate_distance(start[0], start[1])
+                if taxi_distance <= distance:
                     closest_taxi = taxi
+                    distance = taxi_distance
         return closest_taxi
                 
     def _update_taxis(self):
         for taxi in self._taxis:
             taxi.move()
+        print("updates taxis")
     
     def _print_status(self):
         print(f'After {self._total_time} seconds: \n Order Queue: {self._que_manager.__str__()} ')
-        self._print_taxi_locations
+        self._print_taxi_locations()
     
 
     def _print_taxi_locations(self):

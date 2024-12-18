@@ -28,7 +28,9 @@ class Taxi:
         
         total_distance = self.__speed * Constants.TICK
         while total_distance > 0:
-            self._pos += self._interval_move(total_distance)
+            addition = self._interval_move(total_distance)
+            self._pos += addition
+            total_distance -= abs(addition[0]) + abs(addition[1])
             # self._pos += self._calculate_move()
             
             if self._pos == self._destination:
@@ -37,6 +39,7 @@ class Taxi:
                 else:
                     self._request = self._destination = None
                     self._state = TaxiState.STANDING
+            
             
             
     def assign_ride(self, req : RideRequest):
