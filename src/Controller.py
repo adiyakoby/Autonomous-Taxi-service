@@ -22,7 +22,7 @@ class Controller:
         self._update_taxis()
         self._total_time += self._tick
         self._print_status()
-        # time.sleep(2)
+        time.sleep(2)
             
         
     
@@ -40,13 +40,11 @@ class Controller:
         end = random.sample(range(Constants.GRID_LENGTH), 2)
         
         self._que_manager.add_request(RideRequest((start[0], start[1]), (end[0], end[1])))
-        print("added request")
        
     
     def _allocate_taxis(self):
         while not self._que_manager.is_empty():
             request = self._que_manager.get_next_request()
-            print(request.get_pos())
             
             taxi = self._get_closest_taxi(request.get_pos())
             
@@ -54,7 +52,6 @@ class Controller:
                 taxi.assign_ride(request)
             else:
                 self._que_manager.add_request(request)
-        print("allocated taxi")
 
     
     
@@ -72,7 +69,6 @@ class Controller:
     def _update_taxis(self):
         for taxi in self._taxis:
             taxi.move()
-        print("updates taxis")
     
     def _print_status(self):
         print(f'After {self._total_time} seconds: \n Order Queue: {self._que_manager.__str__()} ')

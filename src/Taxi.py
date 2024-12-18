@@ -28,10 +28,9 @@ class Taxi:
         
         total_distance = self.__speed * Constants.TICK
         while total_distance > 0:
-            addition = self._interval_move(total_distance)
-            self._pos += addition
-            total_distance -= abs(addition[0]) + abs(addition[1])
-            # self._pos += self._calculate_move()
+            x_add, y_add = self._interval_move(total_distance)
+            self._pos += (x_add, y_add)
+            total_distance -= abs(x_add) + abs(y_add)
             
             if self._pos == self._destination:
                 if self._destination == self._request.get_pos():
@@ -57,24 +56,11 @@ class Taxi:
 
     
     def _interval_move(self, total_distance):
-        # total_distance = self.__speed * Constants.TICK
-
         x = self._next_interval_move(self._destination[0] - self._pos[0], total_distance)
         y = self._next_interval_move(self._destination[1] - self._pos[1], total_distance)
-        # x_dist = self._destination[0] - self._pos[0]
-        # x += min(abs(x_dist), total_distance)
-        # total_distance -= x
-        # if x_dist < 0:
-        #     x *= -1
-        
-        # if total_distance > 0:
-        #     y_dist = self._destination[1] - self._pos[1]
-        #     y += min(abs(y_dist), total_distance)
-        #     total_distance -= y
-        #     if y_dist < 0:
-        #         y *= -1
-        
+  
         return (x, y)
+    
     
     def _next_interval_move(self, distance, total_distance):
         move = min(abs(distance), total_distance)
