@@ -7,7 +7,7 @@ MAX_VAL = 20000
 class QueueManager:
     
     def __init__(self):
-        self._que = deque()
+        self._que: list[RideRequest] = deque()
     
     
     def add_request(self, req: RideRequest) -> None:
