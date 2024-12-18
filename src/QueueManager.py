@@ -22,3 +22,13 @@ class QueueManager:
     
     def get_next_request(self):
         return self._que.appendleft()
+    
+    def __str__(self):
+        if not self._que:
+            return 'Empty'
+        requsts = []
+        for req in self._que:
+            requsts.append(req.__str__() + '\n')
+        return ''.join(requsts)
+        
+            

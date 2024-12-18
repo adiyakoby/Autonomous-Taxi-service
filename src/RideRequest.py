@@ -13,3 +13,7 @@ class RideRequest:
     
     def get_dest(self) -> tuple[int, int]:
         return self._dest
+    
+    def __str__(self):
+        
+        return f'Drive request: from {self._pos.__str__()} to {self._dest.__str__()}'
