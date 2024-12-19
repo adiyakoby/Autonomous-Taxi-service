@@ -24,15 +24,17 @@ class Taxi:
     
     def move(self):
         if self._state == TaxiState.STANDING or not self._destination:
-            return
+            return None
         
         total_distance = self.__speed * Constants.TICK
-        while total_distance > 0:
+        while total_distance > 0 and self._state == TaxiState.DRIVING:
             x_add, y_add = self._interval_move(total_distance)
-            self._pos += (x_add, y_add)
+            
+            self._pos = (self._pos[0] + x_add, self._pos[1] + y_add)
             total_distance -= abs(x_add) + abs(y_add)
             
             if self._pos == self._destination:
+          
                 if self._destination == self._request.get_pos():
                     self._destination = self._request.get_dest()
                 else:
@@ -79,6 +81,7 @@ class Taxi:
             y += self._next_move(self._destination[1] - self._pos[1])
             
         return (x, y)
+    
     
     def _next_move(self, distance: int):        
         if distance > 0:
