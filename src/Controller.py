@@ -7,7 +7,7 @@ import time
 
 class Controller:
     
-    def __init__(self, tick = Constants.TICK, total_time = Constants.TOTAL):
+    def __init__(self, tick = Constants.TICK):
         self._tick = tick
         self._total_time = 0
         self._taxis: list[Taxi] = []
@@ -43,7 +43,7 @@ class Controller:
        
     
     def _allocate_taxis(self):
-        while not self._que_manager.is_empty():
+        while not self._que_manager.is_empty() and self._is_available_taxi():
             request = self._que_manager.get_next_request()
             
             taxi = self._get_closest_taxi(request.get_pos())
@@ -53,7 +53,9 @@ class Controller:
             else:
                 self._que_manager.add_request(request)
 
-    
+    def _is_available_taxi(self):
+        return any(t.get_state() == TaxiState.STANDING for t in self._taxis)
+        
     
     def _get_closest_taxi(self, start: tuple):
         distance = Constants.GRID_LENGTH * 2
@@ -71,7 +73,7 @@ class Controller:
             taxi.move()
     
     def _print_status(self):
-        print(f'After {self._total_time} seconds: \n Order Queue: {self._que_manager.__str__()} ')
+        print(f'----------------------------------------------------\nAfter {self._total_time} seconds: \nOrder Queue:\n{self._que_manager.__str__()} ')
         self._print_taxi_locations()
     
 
