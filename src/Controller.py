@@ -74,7 +74,7 @@ class Controller:
             if taxi:
                 taxi.assign_ride(request)
             else:
-                self._que_manager.add_request(request)
+                self._que_manager.add_request(request, False)
 
 
     def _is_available_taxi(self):
