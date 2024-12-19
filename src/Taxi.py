@@ -10,7 +10,7 @@ class TaxiState(Enum):
 
 class Taxi:
     
-    def __init__(self, x: int, y: int, id: int, speed:int = 20):
+    def __init__(self, x: int, y: int, id: int, speed:int = Constants.TAXI_SPEED):
         self.__id = id
         self.__speed = speed 
         self._destination = None
@@ -69,22 +69,3 @@ class Taxi:
         total_distance -= move
         return move * (-1 if distance < 0 else 1)
       
-
-    
-    def _calculate_move(self):
-        x = y = 0
-        x_dist = self._destination[0] - self._pos[0] 
-        
-        if x_dist != 0:
-            x += self._next_move(x_dist)
-        else:
-            y += self._next_move(self._destination[1] - self._pos[1])
-            
-        return (x, y)
-    
-    
-    def _next_move(self, distance: int):        
-        if distance > 0:
-            return min(self.__speed, distance)
-        else:
-           return min(self.__speed, -distance) * (-1)
